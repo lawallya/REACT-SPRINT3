@@ -120,7 +120,37 @@ function calculateTotal() {
 function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
-}
+    let longCartList = cartList.length;
+    let long = products.length;// esto es 9, pero por si acaso cambian el arra de productos
+    let total = 0;
+    let productoCarrito = {};// objeto
+    let cantidadProducto = 0;// vable que cuenta cuanto elementos hay de un producto determinado.
+    let i = 0, j = 0;
+
+    cart.splice(0); // el carrito simplificado lo genero siempre deesde cero, de otra manera se duplican los productos que 
+    //se han comprado en una segunda vuelta.
+    
+        for (i; i < long; i++) {//  cada producto de la tienda products[i].name
+            for (j = 0; j < longCartList; j++) {// lo comparo con lo que hay en el carrito de compra, j para recorrer el array cartList
+                productoCarrito = cartList[j];
+
+                if (products[i].id == productoCarrito.id) { cantidadProducto += 1; }
+            }// en caso de qu haya coincidencia actualizo el contador de dicho producto
+            if (cantidadProducto != 0) { // si  hay productos en el contador de productos, entonces llevo ese producto al nuevo carro de la compra 
+                // ¡OJO! estoy manteniendo tambien la propiedad id del objeto incial y ademas añado la propiedad cantidad
+                cart.push(products[i]);
+                total = cart.length;
+                cart[total - 1].quantity = cantidadProducto;
+                cart[total - 1].subtotal = cart[total - 1].quantity * cart[total - 1].price;
+                cart[total - 1].subtotalWithDiscount = cart[total - 1].subtotal;
+                console.table(cart)
+
+                if (cart[total - 1].offer) { applyPromotionsCart() }
+                cantidadProducto = 0; //una vez que he pasado el producto al nuevo carrito de la compra, actualizo de nuevo el contador de producto 
+                //a cero para comenzar a contar el siguiente producto
+            }
+        }
+    }
 
 // Exercise 5
 function applyPromotionsCart() {
