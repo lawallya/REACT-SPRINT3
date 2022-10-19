@@ -129,32 +129,77 @@ function generateCart() {
 
     cart.splice(0); // el carrito simplificado lo genero siempre deesde cero, de otra manera se duplican los productos que 
     //se han comprado en una segunda vuelta.
-    
-        for (i; i < long; i++) {//  cada producto de la tienda products[i].name
-            for (j = 0; j < longCartList; j++) {// lo comparo con lo que hay en el carrito de compra, j para recorrer el array cartList
-                productoCarrito = cartList[j];
 
-                if (products[i].id == productoCarrito.id) { cantidadProducto += 1; }
-            }// en caso de qu haya coincidencia actualizo el contador de dicho producto
-            if (cantidadProducto != 0) { // si  hay productos en el contador de productos, entonces llevo ese producto al nuevo carro de la compra 
-                // ¡OJO! estoy manteniendo tambien la propiedad id del objeto incial y ademas añado la propiedad cantidad
-                cart.push(products[i]);
-                total = cart.length;
-                cart[total - 1].quantity = cantidadProducto;
-                cart[total - 1].subtotal = cart[total - 1].quantity * cart[total - 1].price;
-                cart[total - 1].subtotalWithDiscount = cart[total - 1].subtotal;
-                console.table(cart)
+    for (i; i < long; i++) {//  cada producto de la tienda products[i].name
+        for (j = 0; j < longCartList; j++) {// lo comparo con lo que hay en el carrito de compra, j para recorrer el array cartList
+            productoCarrito = cartList[j];
 
-                if (cart[total - 1].offer) { applyPromotionsCart() }
-                cantidadProducto = 0; //una vez que he pasado el producto al nuevo carrito de la compra, actualizo de nuevo el contador de producto 
-                //a cero para comenzar a contar el siguiente producto
-            }
+            if (products[i].id == productoCarrito.id) { cantidadProducto += 1; }
+        }// en caso de qu haya coincidencia actualizo el contador de dicho producto
+        if (cantidadProducto != 0) { // si  hay productos en el contador de productos, entonces llevo ese producto al nuevo carro de la compra 
+            // ¡OJO! estoy manteniendo tambien la propiedad id del objeto incial y ademas añado la propiedad cantidad
+            cart.push(products[i]);
+            total = cart.length;
+            cart[total - 1].quantity = cantidadProducto;
+            cart[total - 1].subtotal = cart[total - 1].quantity * cart[total - 1].price;
+            cart[total - 1].subtotalWithDiscount = cart[total - 1].subtotal;
+            console.table(cart)
+
+            if (cart[total - 1].offer) { applyPromotionsCart() }
+            cantidadProducto = 0; //una vez que he pasado el producto al nuevo carrito de la compra, actualizo de nuevo el contador de producto 
+            //a cero para comenzar a contar el siguiente producto
         }
     }
+}
 
 // Exercise 5
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+    // dos tipos de promociones si hay mas de 3 productos iguales, el preciose modifica a 10 euros, si hay mas de 10 productos de groceri
+    // se hace un 33% de descuento.
+    //Esta funcion cacula y modifica el subtotal y el subtotal con descuento de cada producto al que se le pueda aplicar promocion
+    // o se hace como he puesto en la clase, que ya directamente se calculan esas propiedades.*/
+    let grocery;
+    let quantity = cart.length;
+    let j = 0;
+    const aIndices = [];
+    let numberGrocery;
+
+    // DESCUENTO 1:  como he mantenido los id y he ordenado el cart por id, conozco la posicion del aceite de oliva. 
+    //En otro caso tendria primero que buscarlo
+    for (i = 0; i < quantity; i++) {
+        if (cart[i].id == 1) {// el id=1 corresponde al aceite de oliva
+            if (cart[i].quantity >= 3) {
+                cart[i].price = 10;
+                cart[i].subtotalWithDiscount = cart[i].price * cart[i].quantity;
+            }
+        }
+    }
+    // cart[i].subtotalWithDiscount = cart[0].price * cart[0].quantity; si no hay descuento los dos precios son iguales,
+    // y siempre cojo el de descuento para presentar en la pagina a través de la funcion printCart()
+
+    // DESCUENTO 2
+
+    if (totalProductos >= 10) {
+        for (j = 0; j <= quantity; j++) {
+            console.log(cart[j]);
+            if (cart[j].type == grocery) {// cuento cuantos productos comestibles hay.
+                grocery += cart[j].quantity;
+                aIndices.push(j);// segun voy encontrando productos de grocery voy guardando su indice en un nuevo array.
+                // el subtotal en principio se calcula solo tal y como he puesto en la clase. Si no tendria que calcularlo aqui 
+                if (grocery >= 10) {
+                    numberGrocery = aIndices.lentgh;
+                    for (i = 0; i <= numberGrocery; i++) {
+                        console.log(aIndices[j]);
+                        console.log(cart[aIndices[j]]);
+                        cart[aIndices[i]].subtotalWithDiscount = 0.66 * cart[aIndices[i]].subtotal;
+                        console.table(cart);
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 // Exercise 6
