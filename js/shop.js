@@ -205,6 +205,24 @@ function applyPromotionsCart() {
 // Exercise 6
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    let j, total = 0;
+    let quantity = cart.length;
+    let productoCarrito;
+    let impresion = "";
+    // para cada uno de los elementos del carrito de la compra genero una fila en el html para presentarlos.
+
+    for (j = 0; j < quantity; j++) {
+        productoCarrito = cart[j];
+        total += productoCarrito.subtotalWithDiscount;
+        impresion += "<tr>" + "<th scope='row'>" +
+            productoCarrito.name + "</th>" +
+            "<td>" + productoCarrito.price + "</td>" +
+            "<td>" + productoCarrito.quantity + "</td>" +
+            "<td>" + productoCarrito.subtotalWithDiscount + "</td>"
+        "</tr>";      
+    }
+    document.getElementById("cart_list").innerHTML = impresion;
+    document.getElementById("total_price").innerHTML = total; //escribo el precio de todo el carrito de la compra
 }
 
 
