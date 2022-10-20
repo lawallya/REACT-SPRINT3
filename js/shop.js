@@ -228,12 +228,31 @@ function printCart() {
 
 // ** Nivell II **
 
-// Exercise 7
+// Exercise 8
 function addToCart(id) {
     // Refactor previous code in order to simplify it 
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+    let productoComprado = {};
+    let indiceEnCart = cart.findIndex(producto => producto.id === id);
+
+    if (indiceEnCart == -1) {//el producto no está en el carrito, lo añado
+        productoComprado = products.find(p => p.id === id);
+        cart.push(productoComprado);//lo añado al carrito
+        cart[cart.length - 1].quantity = 1;
+        cart[cart.length - 1].total = cart[cart.length - 1].quantity * cart[cart.length - 1].price;
+        totalProductos++;
+    }
+    else {//el producto ya está en el carrito, entonces incremento su cantidad en 1
+        cart[indiceEnCart].quantity++;
+        totalProductos++;
+    }
+
+        document.getElementById("count_product").innerHTML = totalProductos; // y pinto el contador en el carrito
+        applyPromotionsCart();
+    
 }
+
 
 // Exercise 8
 function removeFromCart(id) {
