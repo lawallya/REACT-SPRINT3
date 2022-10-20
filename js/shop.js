@@ -179,28 +179,23 @@ function applyPromotionsCart() {
     // y siempre cojo el de descuento para presentar en la pagina a través de la funcion printCart()
 
     // DESCUENTO 2
-
     if (totalProductos >= 10) {
-        for (j = 0; j <= quantity; j++) {
-            console.log(cart[j]);
+        for (j = 0; j < quantity; j++) {
             if (cart[j].type == grocery) {// cuento cuantos productos comestibles hay.
                 grocery += cart[j].quantity;
                 aIndices.push(j);// segun voy encontrando productos de grocery voy guardando su indice en un nuevo array.
-                // el subtotal en principio se calcula solo tal y como he puesto en la clase. Si no tendria que calcularlo aqui 
+                /* el subtotal en principio se calcula solo tal y como he puesto en la clase. Si no tendria que calcularlo aqui */
                 if (grocery >= 10) {
                     numberGrocery = aIndices.lentgh;
-                    for (i = 0; i <= numberGrocery; i++) {
-                        console.log(aIndices[j]);
-                        console.log(cart[aIndices[j]]);
-                        cart[aIndices[i]].subtotalWithDiscount = 0.66 * cart[aIndices[i]].subtotal;
-                        console.table(cart);
+                    for (i = 0; i < numberGrocery; i++) {
+                        cart[aIndices[i]].subtotalWithDiscount = 0.66 * cart[aIndices[i]].quantity;
                     }
                 }
             }
         }
     }
-
 }
+
 
 // Exercise 6
 function printCart() {
@@ -219,7 +214,7 @@ function printCart() {
             "<td>" + productoCarrito.price + "</td>" +
             "<td>" + productoCarrito.quantity + "</td>" +
             "<td>" + productoCarrito.subtotalWithDiscount + "</td>"
-        "</tr>";      
+        "</tr>";
     }
     document.getElementById("cart_list").innerHTML = impresion;
     document.getElementById("total_price").innerHTML = total; //escribo el precio de todo el carrito de la compra
@@ -241,6 +236,8 @@ function addToCart(id) {
         cart.push(productoComprado);//lo añado al carrito
         cart[cart.length - 1].quantity = 1;
         cart[cart.length - 1].total = cart[cart.length - 1].quantity * cart[cart.length - 1].price;
+        cart[cart.length - 1].subtotalWithDiscount = cart[cart.length - 1].total;//inicialmente los pongo iguales y en caso
+        //de pintar el carrito, aplico las promociones que lsi las hay modificaran el subtotal.
         totalProductos++;
     }
     else {//el producto ya está en el carrito, entonces incremento su cantidad en 1
@@ -248,8 +245,7 @@ function addToCart(id) {
         totalProductos++;
     }
 
-        document.getElementById("count_product").innerHTML = totalProductos; // y pinto el contador en el carrito
-        applyPromotionsCart();
+    document.getElementById("count_product").innerHTML = totalProductos; // y pinto el contador en el carrito
     
 }
 
